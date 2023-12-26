@@ -1,3 +1,9 @@
+// The MIT License (MIT)
+// Copyright <2023> <mass>
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 import React, { useState, useEffect, PureComponent } from "react";
 import { AppBar, Toolbar, Typography, Grid, Slider, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -232,7 +238,8 @@ function App() {
 
       <Grid container spacing={2}>
         {/* 各サイン波のグラフとスライダー */}
-        <Grid item xs={10} md={5}>
+
+        <Grid item xs={9} md={5}>
           <WaveChart data={chartData1} color="#8884d8" title="サイン波 1" />
           <LabeledHorizonSlider
             label="周期"
@@ -272,7 +279,8 @@ function App() {
             step={0.001}
           />
         </Grid>
-        <Grid item xs={10} md={5}>
+
+        <Grid item xs={9} md={5}>
           <WaveChart data={chartData2} color="#82ca9d" title="サイン波 2" />
           <LabeledHorizonSlider
             label="周期"
@@ -312,7 +320,7 @@ function App() {
             step={0.001}
           />
         </Grid>
-        <Grid item xs={10} md={5}>
+        <Grid item xs={9} md={5}>
           <WaveChart data={chartData3} color="#ffc658" title="サイン波 3" />
           <LabeledHorizonSlider
             label="周期"
@@ -353,7 +361,7 @@ function App() {
           />
         </Grid>
         {/* 合成波のグラフ */}
-        <Grid item xs={10} md={5}>
+        <Grid item xs={9} md={5}>
           {" "}
           <CompositeChart
             data={chartDataComposite}
@@ -431,6 +439,14 @@ function App() {
           </Grid>
         </Grid>
       </Grid>
+      <StyledAppBar position="static">
+        <Toolbar>
+          <StyledTypography>
+            Copyright (c) 2023 mass This software is released under the MIT
+            License, see LICENSE, see LICENSE.
+          </StyledTypography>
+        </Toolbar>
+      </StyledAppBar>
     </>
   );
 }
