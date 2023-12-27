@@ -1,22 +1,16 @@
-FFT Analysis Application
-Overview
-This application provides a comprehensive analysis of signal processing through Fast Fourier Transform (FFT) and Discrete Fourier Transform (DFT) algorithms. It visualizes sine waves, composite waves, and their amplitude and phase spectrums.
+## FFT Analysis
 
-Features
-Generate and visualize individual sine waves with adjustable parameters (frequency, amplitude, decay, phase).
-Create and display composite waves from multiple sine waves.
-Analyze and illustrate amplitude and phase spectrums using FFT.
-Interactive UI with real-time graph updates.
-Technologies Used
-React
-Material-UI
-Recharts
-Installation
-Clone the repository and run npm install to install dependencies. Start the application with npm start.
+- FFT解析アプリケーションの概要
+  このアプリケーションは、サイン波を生成し、高速フーリエ変換（FFT）、離散フーリエ変換（DFT）を用いて時間軸から周波数軸のグラフへと変換します。
+  正弦波、複合波、およびその振幅と位相スペクトルを視覚化します。
+  注：このアプリケーションは教育目的であり、基本的な信号処理の概念を示しています。
 
-License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+## 機能
 
-Note: This application is intended for educational purposes and demonstrates basic signal processing concepts.
+- サイン波を調整可能なパラメーター（周期、振幅、減衰、位相）で生成し視覚化します。
+- 複数のサイン波から合成波を作成し表示します。
+- FFTを使用して振幅と位相スペクトルを分析し示します。
 
-For detailed setup and usage instructions, refer to the project's GitHub repository.
+## ライセンス
+
+- このプロジェクトはMITライセンスの下でライセンスされています - 詳細についてはLICENSE.mdファイルを参照してください。
