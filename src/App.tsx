@@ -441,10 +441,7 @@ function App() {
       </Grid>
       <StyledAppBar position="static">
         <Toolbar>
-          <StyledTypography>
-            Copyright (c) 2023 mass This software is released under the MIT
-            License, see LICENSE, see LICENSE.
-          </StyledTypography>
+          <StyledTypography>Copyright (c) 2023 mass</StyledTypography>
         </Toolbar>
       </StyledAppBar>
     </>
@@ -740,7 +737,6 @@ const ComplexPlaneChart: React.FC<ComplexPlaneChartProps> = ({
     </Box>
   );
 };
-
 // 目盛り線の位置を計算する関数
 const calcRefLines = (min: number, max: number, step: number) => {
   const lines = [];
@@ -749,7 +745,6 @@ const calcRefLines = (min: number, max: number, step: number) => {
   }
   return lines;
 };
-
 function useWindowSize() {
   const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
   useEffect(() => {
