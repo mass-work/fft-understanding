@@ -4,7 +4,7 @@
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import React, { useState, useEffect, PureComponent } from "react";
+import React, { useState, useEffect, PureComponent, useMemo } from "react";
 import { AppBar, Toolbar, Typography, Grid, Slider, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { SliderProps } from "@mui/material/Slider";
@@ -19,60 +19,91 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// FFTアルゴリズムの実装
+// FFTアルゴリズムの実装（data点数が2のべき乗であることが前提）
 function fft(data: Complex[]): Complex[] {
+  // データ内の点の総数 N
   const N = data.length;
+
+  // データが1点の場合、再帰を終了する
   if (N <= 1) return data;
 
-  const half = Math.floor(N / 2);
+  // データを偶数インデックスと奇数インデックスの要素に再帰的に分割
+  const half = N / 2;
   const even = fft(data.filter((_, i) => i % 2 === 0));
   const odd = fft(data.filter((_, i) => i % 2 !== 0));
+
+  // FFTの計算における負の回転因子を事前計算
   const a = -2 * Math.PI;
 
+  // FFT結果を保持するための配列を初期化
   let results = new Array<Complex>(N);
 
+  // 結果の前半部分のために偶数と奇数部分を組み合わせる処理を行うループ
   for (let k = 0; k < half; k++) {
+    // k番目の回転因子 (e^(2πi*k/N)) を計算
     const exp: Complex = {
       r: Math.cos((a * k) / N),
       i: Math.sin((a * k) / N),
     };
+
+    // 奇数部FFT結果のk番目の要素に回転因子を適用
     let temp: Complex = {
       r: exp.r * odd[k].r - exp.i * odd[k].i,
       i: exp.i * odd[k].r + exp.r * odd[k].i,
     };
+
+    // 偶数部FFT結果と回転因子を適用した奇数部FFT結果を組み合わせる
     results[k] = {
       r: even[k].r + temp.r,
       i: even[k].i + temp.i,
     };
+
+    // FFT結果の後半部分を偶数部FFT結果から回転因子を適用した奇数部FFT結果を引いて計算
     results[k + half] = {
       r: even[k].r - temp.r,
       i: even[k].i - temp.i,
     };
   }
+
+  // 結果として得られたFFTの配列を返す
   return results;
 }
-// DFT計算関数
+
+// 特定の周波数に対するDFT計算関数
 function calculateDFTForFrequency(
   data: Complex[],
   targetFrequency: number,
   numPoints: number,
   samplingRate: number
 ): Complex[] {
+  // DFT結果を格納する配列を初期化
   const dftResults = [];
+
+  // 周波数をサンプルレートで正規化するための定数（ラジアン単位）
   const twoPi = 2 * Math.PI;
   const freqRad = (twoPi * targetFrequency) / samplingRate;
 
+  // データセットの各点に対してDFTの計算を行うループ
   for (let n = 0; n < numPoints; n++) {
+    // 総和計算用の実部と虚部を初期化
     let realPart = 0;
     let imagPart = 0;
+
+    // この周波数とサンプルインデックスにおける角度を計算
     const angle = freqRad * n;
+
+    // 実部と虚部の値を計算して総和
     realPart = data[n].r * Math.cos(angle) - data[n].i * Math.sin(angle);
     imagPart = data[n].i * Math.cos(angle) + data[n].r * Math.sin(angle);
+
+    // 計算された複素数をDFT結果配列に追加
     dftResults.push({ r: realPart, i: imagPart });
   }
 
+  // 計算されたDFT結果を返す
   return dftResults;
 }
+
 // サイン波と合成波の生成
 const generateSineWave = (
   numPoints: number,
@@ -88,35 +119,14 @@ const generateSineWave = (
     return { r: amplitude, i: 0 };
   });
 };
-const generateCompositeWave = (
-  numPoints: number,
-  freqs: number[],
-  amps: number[],
-  decays: number[],
-  phases: number[]
-): Complex[] => {
-  const waves = freqs.map(
-    (freq, i) =>
-      generateSineWave(numPoints, freq, amps[i], decays[i], phases[i]) // ここに位相パラメータを追加
-  );
-  // 以下は変更なし
-  return waves[0].map((_, index) => {
-    return waves.reduce(
-      (acc: Complex, wave) => {
-        acc.r += wave[index].r;
-        return acc;
-      },
-      { r: 0, i: 0 }
-    );
-  });
-};
+
 function formatFrequency(frequency: number): string {
   return frequency.toFixed(1); // 四捨五入して整数にする
 }
 
 // アプリケーションコンポーネント
 function App() {
-  const [frequencyRange, setFrequencyRange] = useState([0, 500]);
+  const [frequencyRange, setFrequencyRange] = useState([0, 100]);
   const [amp1, setAmp1] = useState<number>(5);
   const [amp2, setAmp2] = useState<number>(5);
   const [amp3, setAmp3] = useState<number>(5);
@@ -139,13 +149,13 @@ function App() {
   const sineWave1 = generateSineWave(numPoints, freq1, amp1, decay1, phase1);
   const sineWave2 = generateSineWave(numPoints, freq2, amp2, decay2, phase2);
   const sineWave3 = generateSineWave(numPoints, freq3, amp3, decay3, phase3);
-  const compositeWave = generateCompositeWave(
-    numPoints,
-    [freq1, freq2, freq3],
-    [amp1, amp2, amp3],
-    [decay1, decay2, decay3],
-    [phase1, phase2, phase3]
-  );
+  const compositeWave = sineWave1.map((point, index) => {
+    return {
+      r: point.r + sineWave2[index].r + sineWave3[index].r,
+      i: point.i + sineWave2[index].i + sineWave3[index].i,
+    };
+  });
+
   // サンプリングレートを基に時間軸を計算
   const timeAxis = Array.from(
     { length: numPoints },
@@ -383,7 +393,7 @@ function App() {
                 dataKey="amp"
                 selectedFrequency={selectedFrequency} // この行を追加
                 dominMinY={0}
-                dominMaxY={15}
+                dominMaxY={10}
               />
             </Box>
           </Grid>
@@ -424,7 +434,7 @@ function App() {
               onChange={(e, val) => setFrequencyRange(val as number[])} // 型アサーションを追加
               valueLabelDisplay="auto"
               min={0}
-              max={500} // ナイキスト周波数まで
+              max={250} // ナイキスト周波数まで
             />
           </Grid>
           <Grid item xs={10} md={5}>
@@ -433,7 +443,7 @@ function App() {
               value={selectedFrequency}
               onChange={(e, val) => setSelectedFrequency(val as number)}
               min={0}
-              max={numPoints / 2 - 1}
+              max={numPoints / 4 - 1}
               step={freqStep}
             />
           </Grid>
@@ -451,13 +461,11 @@ function App() {
 export default App;
 
 // スタイリング
-// AppBarのスタイル
 const StyledAppBar = styled(AppBar)({
   background: "#2c387e", // ネイビー色
   boxShadow: "none",
   borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
 });
-// Typographyのスタイル
 const StyledTypography = styled(Typography)({
   fontWeight: 500, // やや太め
   color: "#FFFFFF", // 白色
@@ -737,7 +745,6 @@ const ComplexPlaneChart: React.FC<ComplexPlaneChartProps> = ({
     </Box>
   );
 };
-// 目盛り線の位置を計算する関数
 const calcRefLines = (min: number, max: number, step: number) => {
   const lines = [];
   for (let i = min; i <= max; i += step) {
