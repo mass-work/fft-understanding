@@ -21,7 +21,7 @@ import {
 
 // FFTアルゴリズムの実装（data点数が2のべき乗であることが前提）
 function fft(data: Complex[]): Complex[] {
-  // データ内の点の総数 N
+  // データ内の点の総数N
   const N = data.length;
 
   // データが1点の場合、再帰を終了する
