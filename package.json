@@ -2,7 +2,7 @@
   "name": "001_fft-understanding",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mass-work.github.io/fft-understanding/",
+  "homepage": "https://fft-analysis-mass.xyz/",
   "dependencies": {
     "gh-pages": "^6.1.1",
     "@emotion/react": "^11.11.3",
