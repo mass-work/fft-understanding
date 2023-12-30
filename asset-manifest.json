@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/fft-understanding/static/css/main.e6c13ad2.css",
-    "main.js": "/fft-understanding/static/js/main.0b9631a4.js",
-    "static/js/787.60685a09.chunk.js": "/fft-understanding/static/js/787.60685a09.chunk.js",
-    "index.html": "/fft-understanding/index.html",
-    "main.e6c13ad2.css.map": "/fft-understanding/static/css/main.e6c13ad2.css.map",
-    "main.0b9631a4.js.map": "/fft-understanding/static/js/main.0b9631a4.js.map",
-    "787.60685a09.chunk.js.map": "/fft-understanding/static/js/787.60685a09.chunk.js.map"
+    "main.css": "/static/css/main.e6c13ad2.css",
+    "main.js": "/static/js/main.c73d0c23.js",
+    "static/js/787.60685a09.chunk.js": "/static/js/787.60685a09.chunk.js",
+    "index.html": "/index.html",
+    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
+    "main.c73d0c23.js.map": "/static/js/main.c73d0c23.js.map",
+    "787.60685a09.chunk.js.map": "/static/js/787.60685a09.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.0b9631a4.js"
+    "static/js/main.c73d0c23.js"
   ]
 }
